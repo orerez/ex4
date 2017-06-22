@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="GenericList"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/liav/CLionProjects/GenericList/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="GenericList">
+				<Option output="C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/GenericList.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/liav/CLionProjects/GenericList/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include/c++"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include/c++/backward"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/../../../../include"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include-fixed"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 GenericList"/>
+					<CompileFile command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="GenericList/fast">
+				<Option output="C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/GenericList.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/liav/CLionProjects/GenericList/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include/c++"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include/c++/backward"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/../../../../include"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include-fixed"/>
+					<Add directory="C:/TDM-GCC-64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 GenericList/fast"/>
+					<CompileFile command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/liav/CLionProjects/GenericList/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/liav/CLionProjects/GenericList/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/TDM-GCC-64/bin/mingw32-make.exe -f &quot;C:/Users/liav/CLionProjects/GenericList/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/Enigma.cpp">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/Enigma.h">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/EscapeRoom.c">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/EscapeRoom.h">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/EscapeRoomWrapper.cpp">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/EscapeRoomWrapper.h">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/Exceptions.h">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/main.cpp">
+			<Option target="GenericList"/>
+		</Unit>
+		<Unit filename="C:/Users/liav/CLionProjects/GenericList/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

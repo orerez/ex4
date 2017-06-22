@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/liav/CLionProjects/GenericList/EscapeRoom.c
+EscapeRoom.h
+C:/Users/liav/CLionProjects/GenericList/EscapeRoom.h
+stdlib.h
+-
+string.h
+-
+
+C:/Users/liav/CLionProjects/GenericList/EscapeRoom.h
+stdbool.h
+-
+
