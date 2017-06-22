@@ -44,6 +44,7 @@ static bool getFunctions(){
     room.rate(2);
     if(room.getRate()!=3.5)
         return false;
+    std::cout<<"eliminate err"<<std::endl;
     return true;
 }
 
@@ -54,7 +55,7 @@ static bool constructors(){
     room_C=room_B;
     std::cout<<"computer printing 3 rooms which built from different constructors\n"
              <<room_A<<room_B<<room_C<<std::endl;
-
+    return true;
 }
 
 static bool powerTests(){
@@ -73,7 +74,7 @@ static bool powerTests(){
         return false;
     if(!(room_A!=room_B && room_B!=room_E && room_F==room_F))
         return false;
-
+    assert(true);
     return true;
 }
 
@@ -135,6 +136,41 @@ static bool listBasic(){
     List<T> list1;
     list1.insert("ahmad");
     list1.insert("allah");
+    assert(list1.getSize()==2);
+    list1.insert("davidof");
+    assert(list1.getSize()==3);
+    List<T>::Iterator it=list1.begin();
+    List<T>::Iterator it2(it);
+    const node<T> node1=it2.getNode();
+    if(it != it2)
+        return false;
+    List<T>::Iterator it3=list1.end();
+    if(it==it3)
+        return false;
+    T var1=*it++;
+    T var2=*it;
+    --it;
+    T var3=*it;
+    assert(var3==var1);
+    it++;
+    T var4=*--it;
+    assert(var4==var3);
+    it=list1.end();
+    it=it2;
+    it=it;
+    return true;
+}
+
+static bool listInsertion(){
+    List<T> list1;
+    list1.insert("aaaaa");
+    list1.insert("bbbbb");
+    list1.insert("ccccc");
+    List<T>::Iterator iterator=list1.begin();
+    iterator++;
+    list1.insert("AAAAA",iterator);
+
+
     return true;
 }
 
@@ -147,6 +183,7 @@ static void tests(){
         RUN_TEST(nodeBasic);
         RUN_TEST(iteratorBasic);
         RUN_TEST(listBasic);
+        RUN_TEST(listInsertion);
 }
 
 int main() {
