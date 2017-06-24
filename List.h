@@ -1,7 +1,3 @@
-//
-// Created by orerez on 20/06/2017.
-//
-
 #ifndef UNTITLED_LIST_H
 #define UNTITLED_LIST_H
 
@@ -11,23 +7,24 @@ using namespace mtm::ListExceptions;
 
 template <class T>
 class node{
-    node* next;
-    node* previous;
+    node<T>* next;
+    node<T>* previous;
     bool end;
     T info;
 public:
     node()= default;
     node(const T& info);
-    node(const node& node)= delete;
+    node(const node<T>& node)= default;
     node(node* next,node* prev, bool end,T info);
     ~node()= default;
-    T getInfo() const;
+    const T& getInfo() const;
     node* getNext() const;
     node* getPrevious() const;
     void setEnd(bool var);
     void setNext(node* next);
     void setPrevious(node* previous);
-    bool isEnd();
+    void setInfo(T info);
+    const bool isEnd() const;
 };
 
 
@@ -38,8 +35,8 @@ class List{
     node<T>* last;
 public:
     List();
-    List(const List& list);
-    ~List()= default;
+    List(const List& list)= delete;
+    ~List();
     List& operator=(const T& List);
     int getSize();
     class Iterator;
@@ -53,35 +50,35 @@ public:
 template <class T>
 class List<T>::Iterator{
     friend class List<T>;
-    const List<T>* my_list;
     node<T>* index;
-    Iterator(node<T>* node, List<T>* list):index(node),my_list(list){}
+
 public:
-//      Iterator(node<T>& node);
-    Iterator(const Iterator& iterator);
-    Iterator(const List<T>* list, node<T>* node);
-    T& operator*() const;
+    Iterator(node<T>* node);
+    Iterator(const Iterator& iterator)= default;
+    const T& operator*() const;
+    const node<T> getNode() const ;
     Iterator& operator++();
     Iterator& operator--();
     Iterator operator++(int);
     Iterator operator--(int);
-    Iterator& operator=(const Iterator& iterator)= default;
+    Iterator& operator=(const Iterator& iterator);
     bool operator==(const Iterator& it) const;
     bool operator!=(const Iterator& it) const ;
 
 
 };
 
+// << ----- >>  Templates for node class << ------ >> //
 template <class T>
 node<T>::node(const T& info):next(NULL),previous(NULL),end(false),info(info) {
 }
 
 template <class T>
-node<T>::node(node* next,node* prev, bool end,T info):next(next),previous(prev),end(end),info(info){
+node<T>::node(node<T>* next,node<T>* prev, bool end,T info):next(next),previous(prev),end(end),info(info){
 }
 
 template <class T>
-T node<T>::getInfo() const{
+const T& node<T>::getInfo() const{
     return (this->info);
 }
 
@@ -101,127 +98,171 @@ void node<T>::setEnd(bool var){
 }
 
 template <class T>
-void node<T>::setNext(node* next){
+void node<T>::setNext(node<T>* next){
     this->next=next;
 }
 
 template <class T>
-void node<T>::setPrevious(node* prev){
+void node<T>::setPrevious(node<T>* prev){
     this->previous=prev;
 }
 
 template <class T>
-bool node<T>::isEnd() {
+void node<T>::setInfo(T info) {
+    this->info=info;
+}
+
+template <class T>
+const bool node<T>::isEnd() const {
     return this->end;
 }
 
+// << ----- >> End of node class << ------ >> //
 
+
+// << ----- >>  Templates for Iterator class << ------ >> //
 template <class T>
-T& List<T>::Iterator::operator*() const {
-    if(this== nullptr){
+const T& List<T>::Iterator::operator*() const {
+    if(this== NULL){ //Should be nullptr
         ElementNotFound error;
         throw(error);
     }
-    return this->index.getInfo();
+    return index->getInfo();
 }
-//
-//template <class T>
-//Iterator& List::Iterator<T>::operator++() {
-//    this->index=this->index->getNext();
-//    return *this;
-//}
-//
-//template <class T>
-//Iterator& List::Iterator<T>::operator--() {
-//    this->index=this->index->getPrevious();
-//    return (*this);
-//}
-//
-//template <class T>
-//Iterator List::Iterator<T>::operator++(int) {
-//    Iterator current = *this;
-//    ++*this;
-//    return current;
-//}
-//
-//template <class T>
-//Iterator List::Iterator<T>::operator--(int) {
-//    Iterator current = *this;
-//    --*this;
-//    return current;
-//}
-//
-//template <class T>
-//bool List::Iterator<T>::operator==(const Iterator& it) const {
-//    if(List != it.List)
-//        return false;
-//    return this->index==it.index;
-//}
-//
-//template <class T>
-//bool List::Iterator<T>::operator!=(const Iterator &it) const {
-//    return !(*this==it);
-//}
-//
-//template <class T>
-//List::Iterator<T>::Iterator(List <T> *List, node <T> *node) : List(List),node(node){}
-////---------------------------------------------------------------------------------------------------
-//
+
 template <class T>
-List<T>::List() : size(0) ,first(nullptr) {
-    node<T> end_of_list(NULL);
-    end_of_list.setEnd(true);
-    this->last=&end_of_list;
+List<T>::Iterator::Iterator(node<T> *node) {
+    this->index=node;
 }
-//
-//template <class T>
-//int List<T>::getSize() {
-//    return this->size;
-//}
-//
-//Iterator List::begin() {
-//    return Iterator(this,this->first);
-//}
-//
-//Iterator List::end() {
-//    return Iterator(this,this->last);
-//}
-//
-//template <class T>
-//void List::insert(const T &data, Iterator iterator) {
-//    if(List!=iterator.List){
-//        ElementNotFound error;
-//        throw (error);
-//    }
-//    if(this->size==0){
-//        node first_node =  node(this->last,NULL, false,data);
-//        this->first=&first_node;
-//        this->size++;
-//        return;
-//    }
-//
-//    bool is_first=false,is_last=false;
-//    if(iterator==*this->first)
-//        is_first= true;
-//    if(iterator==*this->last)
-//        is_last= true;
-//    node new_node(iterator.index,(--iterator).index, false,data);
-//    if(is_first)
-//        this->first=&new_node;
-//    if(is_last)
-//        this->last=&new_node;
-//    iterator=new_node;
-//    this->size++;
-//}
-//
-//template <class T>
-//void List::insert(const T &data) {
-//    List::Iterator iterator;
-//    iterator = this->end();
-//    this->insert(data,iterator);
-//}
+
+template <class T>
+const node<T> List<T>::Iterator::getNode() const{
+    return *index;
+}
+
+template <class T>
+typename List<T>::Iterator& List<T>::Iterator::operator++(){
+    index=index->getNext();
+    return *this;
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::Iterator::operator++(int){
+    List<T>::Iterator result(index);
+    index=index->getNext();
+    return result;
+}
+
+template <class T>
+typename List<T>::Iterator& List<T>::Iterator::operator--(){
+    index=index->getPrevious();
+    return *this;
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::Iterator::operator--(int){
+    List<T>::Iterator result(index);
+    index=index->getPrevious();
+    return result;
+}
+
+template <class T>
+bool List<T>::Iterator::operator==(const Iterator& it) const{
+    int count1=0,count2=0;
+    List<T>::Iterator iterator1(*this);
+    List<T>::Iterator iterator2(it);
+    while (!iterator1.getNode().isEnd()){
+        iterator1++;
+        count1++;
+    }
+    while (!iterator2.getNode().isEnd()){
+        iterator2++;
+        count2++;
+    }
+    return (count1==count2 && (*iterator1==*iterator2));
+}
+
+template <class T>
+bool List<T>::Iterator::operator!=(const Iterator& it) const{
+    return !(*this==it);
+}
+
+template <class T>
+typename List<T>::Iterator& List<T>::Iterator::operator=(const Iterator& iterator){
+    if(*this==iterator)
+        return *this;
+    this->index=iterator.index;
+    return *this;
+}
+
+// << ----- >> End of Iterator class << ------ >> //
+
+
+// << ----- >>  Templates for list class << ------ >> //
+template <class T>
+List<T>::List() : size(0) {
+    node<T>* end_of_list=new node<T>();
+    end_of_list->setEnd(true);
+    this->last=end_of_list;
+    this->first=end_of_list;
+}
+
+template <class T>
+List<T>::~List() {
+    node<T>* tmp;
+    while(!this->first->isEnd()){
+        tmp=this->first;
+        this->first=this->first->getNext();
+        delete tmp;
+    }
+}
+
+template <class T>
+void List<T>::insert(const T &data) {
+    if (this->size==0){
+        node<T>* node1=new node<T>(this->last, NULL, false,data); //Should be nullptr
+        this->first=node1;
+        this->last->setPrevious(node1);
+        this->size++;
+    }
+    else{
+        node<T>* debug=this->last;
+        node<T>* tmp=debug->getPrevious();
+        node<T>* node2=new node<T>(this->last,tmp, false,data);
+        tmp->setNext(node2);
+        this->last->setPrevious(node2);
+        this->size++;
+    }
+}
+
+template <class T>
+void List<T>::insert(const T& data, Iterator iterator){
+    node<T>* newNode=new node<T>(iterator.index,iterator.index->getPrevious(),false,data);
+    iterator--;
+    iterator.index->setNext(newNode);
+    this->size++;
+}
+
+template <class T>
+int List<T>::getSize() {
+    return this->size;
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::begin() {
+    Iterator iterator(this->first);
+    return iterator;
+}
+
+template <class T>
+typename List<T>::Iterator List<T>::end() {
+    Iterator iterator(this->last);
+    return iterator;
+}
+
+// << ----- >> End of list class << ------ >> //
+
 
 
 
 #endif //UNTITLED_LIST_H
-
