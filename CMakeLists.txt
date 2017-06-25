@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
-project(untitled)
+project(new_ex4)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp List.h List.cpp Exceptions.h tests.cpp Enigma.cpp Enigma.h EscapeRoom.c EscapeRoom.h
-        EscapeRoomWrapper.cpp EscapeRoomWrapper.h)
-add_executable(untitled ${SOURCE_FILES})
+set(SOURCE_FILES main.cpp  Enigma.h Enigma.cpp Exceptions.h EscapeRoom.c EscapeRoom.h EscapeRoomWrapper.cpp
+        EscapeRoomWrapper.h List.cpp List.h ScaryRoom.cpp ScaryRoom.h kidsRoom.h kidsRoom.cpp)
+add_executable(new_ex4 ${SOURCE_FILES})

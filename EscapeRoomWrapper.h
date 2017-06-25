@@ -77,7 +77,7 @@ namespace mtm{
             void rate(const int& newRate) const;
 
             // Destructor for EscapeRoomWrapper
-            ~EscapeRoomWrapper();
+            virtual ~EscapeRoomWrapper();
 
             // Prints the data of the Room in the following format:
             //
@@ -113,7 +113,7 @@ namespace mtm{
             //
             Enigma getHardestEnigma();
 
-        private:
+        protected:
             EscapeRoom room;
             std::vector<Enigma> Enigmas;
         };

@@ -4,6 +4,8 @@
 #include "List.h"
 #include <assert.h>
 #include "Enigma.h"
+#include "ScaryRoom.h"
+#include "kidsRoom.h"
 
 #define RUN_TEST(test) \
 do { \
@@ -255,7 +257,45 @@ static bool listInsertion(){
     return true;
 }
 
-static void tests(){
+static bool scaryBaseFunctions(){
+    ScaryRoom room=ScaryRoom((char*)"firstRoom",50,5,4,16,7);
+    std::cout<<room<<std::endl;
+    if(room.getNumOfScaryEnigmas()!=7)
+        return false;
+    room.setNewAgeLimit(14);
+    room.incNumberOfScaryEnigmas();
+    if (room.getNumOfScaryEnigmas()!=8)
+        return false;
+    std::cout<<room<<std::endl;
+    room.setNewAgeLimit(-3);
+    try{
+        std::cout<<room<<std::endl;
+    }
+    catch(ScaryRoomIllegalAgeLimit){
+        std::cout<<"Illegal Age Limit!" <<std::endl;
+
+    }
+    return true;
+}
+
+static bool kidsBaseFunctions(){
+    kidsRoom room=kidsRoom((char*)"firstRoom",50,5,4,7);
+    std::cout<<room<<std::endl;
+    room.setNewAgeLimit(3);
+    std::cout<<room<<std::endl;
+    try{
+        room.setNewAgeLimit(-3);
+    }
+    catch(mtm::escaperoom::KidsRoomIllegalAgeLimit){
+        std::cout<<"Illegal Age Limit!" <<std::endl;
+
+    }
+    std::cout<<room<<std::endl;
+    return true;
+}
+
+
+static void tests() {
     RUN_TEST(escaperoomWrapperBasicFunctions);
     RUN_TEST(escaperoomWrapperVectorFunctions);
     RUN_TEST(getFunctions);
@@ -266,6 +306,8 @@ static void tests(){
     RUN_TEST(iteratorBasic);
     RUN_TEST(listBasic);
     RUN_TEST(listInsertion);
+    RUN_TEST(scaryBaseFunctions);
+    RUN_TEST(kidsBaseFunctions);
 }
 
 int main() {
@@ -273,3 +315,4 @@ int main() {
     tests();
     return 0;
 }
+
