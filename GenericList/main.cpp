@@ -123,7 +123,7 @@ static bool nodeBasic(){
 
     node<T> node4(&node2,&node1, false,"chipopotam");
     node<T> node5(node4);
-    node5.getNext();
+
 
     return true;
 }
@@ -168,9 +168,27 @@ static bool listInsertion(){
     list1.insert("ccccc");
     List<T>::Iterator iterator=list1.begin();
     iterator++;
-    list1.insert("AAAAA",iterator);
-
-
+    List<T>::Iterator iterator2=list1.begin();
+    iterator2++;
+    if(iterator==iterator2)
+        iterator2--;
+    if (iterator2!=iterator)
+        iterator--;
+    List<T> list2;
+    list2.insert("aaaaa");
+    list2.insert("bbbbb");
+    list2.insert("ccccc");
+    if(list1==list2)
+        std::cout<<"yay"<<std::endl;
+    List<T>::Iterator iterator3=list2.begin();
+    if(iterator3==iterator)
+        iterator2++;
+    list1.remove(iterator);
+    iterator=list1.begin();
+    iterator++;
+    list1.remove(iterator);
+    if(list1!=list2)
+        std::cout<<"double yay"<<std::endl;
     return true;
 }
 
