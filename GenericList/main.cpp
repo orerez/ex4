@@ -231,7 +231,7 @@ static bool nodeBasic(){
 
     node<T> node4(&node2,&node1, false,"chipopotam");
     node<T> node5(node4);
-    node5.getNext();
+
 
     return true;
 }
