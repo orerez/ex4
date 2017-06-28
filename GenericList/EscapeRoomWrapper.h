@@ -3,8 +3,13 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include "EscapeRoom.h"
+#include "Enigma.h"
 
+typedef enum{
+    SCARY_ROOM, KIDS_ROOM, BASE_ROOM
+}RoomType;
 
 namespace mtm{
     namespace escaperoom {
@@ -35,6 +40,18 @@ namespace mtm{
             //@throws EscapeRoomMemoryProblemException in case of creation failure.
             EscapeRoomWrapper(const EscapeRoomWrapper& room);
 
+            //adds a new enigma to the room's enigmas collection.
+            //
+            //@param enigma : the enigma to be added.
+            void addEnigma(const Enigma& enigma);
+
+            //removes an enigma from the room enigmas if exists.
+            //
+            //@throws EscapeRoomNoEnigmasException if there are no enigmas in room.
+            //@throws EscapeRoomEnigmaNotFoundException if no such enigma is found in the room.
+            //@param enigma : the enigma to be removed.
+            void removeEnigma(const Enigma& enigma);
+
             //assignment operator
             //
             //@param room : the room to be assigned.
@@ -63,7 +80,7 @@ namespace mtm{
             void rate(const int& newRate) const;
 
             // Destructor for EscapeRoomWrapper
-            ~EscapeRoomWrapper();
+            virtual ~EscapeRoomWrapper();
 
             // Prints the data of the Room in the following format:
             //
@@ -85,13 +102,27 @@ namespace mtm{
             //
             int getMaxTime() const;
 
-
             //Function returns the number of participants allowed in the EscapeRoom.
             //
             int getMaxParticipants() const;
 
-        private:
+            //Function returns all the enigmas in the EscapeRoom.
+            //
+            std::vector<Enigma>& getAllEnigmas();
+
+            //Function returns the hardest enigma in the escapeRoom.
+            //If there is more then one, returns the one which first appears in vector.
+            //@throws EscapeRoomNoEnigmasException if there are no enigmas in room.
+            //
+            Enigma getHardestEnigma();
+
+            //Function returns the type of the EscapeRoom.
+            //
+            virtual RoomType getType() const;
+
+        protected:
             EscapeRoom room;
+            std::vector<Enigma> Enigmas;
         };
 
         std::ostream& operator<<(std::ostream& output, const EscapeRoomWrapper& room);
