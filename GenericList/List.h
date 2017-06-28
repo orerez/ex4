@@ -37,14 +37,17 @@ public:
     List();
     List(const List& list)= delete;
     ~List();
-    List& operator=(const T& List);
+    List& operator=(const T& List)= delete;
     int getSize();
     class Iterator;
-    Iterator begin();
-    Iterator end();
+    Iterator begin() const;
+    Iterator end() const;
     void insert(const T& data, Iterator iterator);
     void insert(const T& data);
     void remove(Iterator iterator);
+    bool operator==(const List<T>& list) const;
+    bool operator!=(const List<T>& list) const;
+
 };
 
 template <class T>
@@ -123,7 +126,7 @@ const bool node<T>::isEnd() const {
 // << ----- >>  Templates for Iterator class << ------ >> //
 template <class T>
 const T& List<T>::Iterator::operator*() const {
-    if(this== NULL){ //Should be nullptr
+    if(this== nullptr){
         ElementNotFound error;
         throw(error);
     }
@@ -168,18 +171,7 @@ typename List<T>::Iterator List<T>::Iterator::operator--(int){
 
 template <class T>
 bool List<T>::Iterator::operator==(const Iterator& it) const{
-    int count1=0,count2=0;
-    List<T>::Iterator iterator1(*this);
-    List<T>::Iterator iterator2(it);
-    while (!iterator1.getNode().isEnd()){
-        iterator1++;
-        count1++;
-    }
-    while (!iterator2.getNode().isEnd()){
-        iterator2++;
-        count2++;
-    }
-    return (count1==count2 && (*iterator1==*iterator2));
+    return (this->index==it.index);
 }
 
 template <class T>
@@ -215,12 +207,15 @@ List<T>::~List() {
         this->first=this->first->getNext();
         delete tmp;
     }
+    tmp=this->first;
+   if(tmp!= nullptr)
+       delete(tmp);
 }
 
 template <class T>
 void List<T>::insert(const T &data) {
     if (this->size==0){
-        node<T>* node1=new node<T>(this->last, NULL, false,data); //Should be nullptr
+        node<T>* node1=new node<T>(this->last, nullptr, false,data);
         this->first=node1;
         this->last->setPrevious(node1);
         this->size++;
@@ -244,20 +239,61 @@ void List<T>::insert(const T& data, Iterator iterator){
 }
 
 template <class T>
+void List<T>::remove(Iterator iterator){
+    bool found=false;
+    Iterator iterator1=this->begin();
+    for(iterator1=this->begin();!iterator1.index->isEnd()&&!found;iterator1++)
+        if(iterator1==iterator)
+            found=true;
+    if(!found)
+        throw ElementNotFound();
+    iterator1--;
+    if(this->first==iterator1.index) {
+        this->first = iterator1.index->getNext();
+        delete iterator.index;
+        this->size--;
+    }
+    else {
+        iterator1--;
+        iterator1.index->setNext(iterator.index->getNext());
+        delete iterator.index;
+        this->size--;
+    }
+}
+
+template <class T>
 int List<T>::getSize() {
     return this->size;
 }
 
 template <class T>
-typename List<T>::Iterator List<T>::begin() {
+typename List<T>::Iterator List<T>::begin() const {
     Iterator iterator(this->first);
     return iterator;
 }
 
 template <class T>
-typename List<T>::Iterator List<T>::end() {
+typename List<T>::Iterator List<T>::end() const {
     Iterator iterator(this->last);
     return iterator;
+}
+
+template <class T>
+bool List<T>::operator==(const List<T>& list) const{
+    Iterator iterator1=this->begin();
+    Iterator iterator2=list.begin();
+    while(!iterator1.index->isEnd() && !iterator2.index->isEnd()) {
+        if (iterator1.index->getInfo() != iterator2.index->getInfo())
+            return false;
+        iterator1++;
+        iterator2++;
+    }
+    return (iterator1.index->isEnd()&&iterator2.index->isEnd());
+}
+
+template <class T>
+bool List<T>::operator!=(const List<T>& list) const {
+    return !(*this==list);
 }
 
 // << ----- >> End of list class << ------ >> //
