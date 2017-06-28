@@ -17,8 +17,7 @@ public:
     // @param escapeTime : the maximal escape time allowed in the room.
     // @param level : the level of the escape room.
     // @param maxParticipants : the maximal participants allowed in the room.
-    // @param ageLimit : The number of scary Enigmas in the room.
-    // @param numOfScaryEnigmas : The number of scary Enigmas in the room.
+    // @param ageLimit : The maximal age allowing entrance to the room.
     // @throws EscapeRoomMemoryProblemException in case of creation failure.
     // The rest of the room's data is initialized as described in the exercise sheet.
     //
@@ -42,6 +41,9 @@ public:
     //
     int getAgeLimit() const;
 
+    //Function returns the type of the EscapeRoom.
+    //
+    RoomType getType() const override ;
 
 };
 

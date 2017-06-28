@@ -17,6 +17,10 @@ int kidsRoom::getAgeLimit() const{
     return this->ageLimit;
 }
 
+RoomType kidsRoom::getType() const {
+    return KIDS_ROOM;
+}
+
 std::ostream& operator<<(std::ostream &output, const kidsRoom &room) {
     output <<"Kids Room: "<<room.getName()<<" ("<< room.getMaxTime()<<"/"<<room.level()
            <<"/"<<room.getMaxParticipants()<<"/"<<room.getAgeLimit()<<")";

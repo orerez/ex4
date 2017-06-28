@@ -10,10 +10,27 @@ using namespace mtm::escaperoom;
 
 EscapeRoomWrapper::EscapeRoomWrapper(char *name, const int &escapeTime, const int &level, const int &maxParticipants) {
     room=escapeRoomCreate(name,escapeTime,maxParticipants,level);
+    if(this->room==NULL){
+        EscapeRoomMemoryProblemException escapeRoomMemoryProblemException;
+        throw escapeRoomMemoryProblemException;
+    }
 }
 
 EscapeRoomWrapper::EscapeRoomWrapper(char *name, const int &level) {
     room=escapeRoomCreate(name,60,6,level);
+    if(this->room==NULL){
+        EscapeRoomMemoryProblemException escapeRoomMemoryProblemException;
+        throw escapeRoomMemoryProblemException;
+    }
+}
+
+EscapeRoomWrapper::EscapeRoomWrapper(const EscapeRoomWrapper &room) {
+    if (room.room == nullptr) {
+        EscapeRoomMemoryProblemException escapeRoomMemoryProblemException;
+        throw escapeRoomMemoryProblemException;
+    }
+    this->room = escapeRoomCopy(room.room);
+    this->Enigmas = room.Enigmas;
 }
 
 void EscapeRoomWrapper::addEnigma (const Enigma& enigma){
@@ -86,16 +103,16 @@ int EscapeRoomWrapper::level() const{
     return getLevel(room);
 }
 
+RoomType EscapeRoomWrapper::getType() const {
+    return BASE_ROOM;
+}
+
 double EscapeRoomWrapper::getRate() const{
     return roomGetRate(room);
 }
 
 void EscapeRoomWrapper::rate(const int& newRate) const{
     updateRate(room,newRate);
-}
-
-EscapeRoomWrapper::EscapeRoomWrapper(const EscapeRoomWrapper &room){
-    this->room=escapeRoomCopy(room.room);
 }
 
 EscapeRoomWrapper::~EscapeRoomWrapper() {
@@ -131,3 +148,4 @@ std::ostream& mtm::escaperoom::operator<<(std::ostream& output, const EscapeRoom
            <<"/"<<room.getMaxParticipants()<<")";
     return output;
 }
+

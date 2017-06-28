@@ -7,6 +7,9 @@
 #include "EscapeRoom.h"
 #include "Enigma.h"
 
+typedef enum{
+    SCARY_ROOM, KIDS_ROOM, BASE_ROOM
+}RoomType;
 
 namespace mtm{
     namespace escaperoom {
@@ -112,6 +115,10 @@ namespace mtm{
             //@throws EscapeRoomNoEnigmasException if there are no enigmas in room.
             //
             Enigma getHardestEnigma();
+
+            //Function returns the type of the EscapeRoom.
+            //
+            virtual RoomType getType() const;
 
         protected:
             EscapeRoom room;

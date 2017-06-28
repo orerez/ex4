@@ -6,14 +6,14 @@
 #include "Exceptions.h"
 
 void ScaryRoom::setNewAgeLimit(const int& limit){
+    if(limit<0){
+        mtm::escaperoom::ScaryRoomIllegalAgeLimit illegalAgeLimit;
+        throw illegalAgeLimit;
+    }
     this->ageLimit=limit;
 }
 
 int ScaryRoom::getAgeLimit() const{
-    if(this->ageLimit<0){
-        mtm::escaperoom::ScaryRoomIllegalAgeLimit illegalAgeLimit;
-        throw illegalAgeLimit;
-    }
     return this->ageLimit;
 }
 
@@ -23,6 +23,10 @@ void ScaryRoom::incNumberOfScaryEnigmas() {
 
 int ScaryRoom::getNumOfScaryEnigmas() const {
     return this->numOfScaryEnigmas;
+}
+
+RoomType ScaryRoom::getType() const{
+    return SCARY_ROOM;
 }
 
 std::ostream& operator<<(std::ostream &output, const ScaryRoom &room) {

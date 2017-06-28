@@ -6,6 +6,7 @@
 #include "Exceptions.h"
 using namespace mtm::escaperoom;
 
+
 Enigma::Enigma(const std::string& name, const Difficulty& difficulty, const int& numOfElements,const set<string>& elements){
     int size =(int)elements.size();
     if(size!=numOfElements){

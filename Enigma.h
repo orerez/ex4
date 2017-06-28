@@ -43,7 +43,7 @@ namespace escaperoom{
         //copy constructor
         //
         //@param enigma : the enigma to be copied.
-        Enigma(const Enigma& enigma) = default;
+        Enigma(const Enigma& enigma)= default;
 
         // adds a new element to the set of elements used in the enigma.
         //
@@ -92,7 +92,7 @@ namespace escaperoom{
         // @param enigma : the enigma whose data is printed.
         friend std::ostream& operator<<(std::ostream& output, const Enigma& enigma);
 
-        ~Enigma() = default;
+        ~Enigma()= default;
 
         //Function returns the name of the enigma.
         //
