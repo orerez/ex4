@@ -7,18 +7,8 @@
 #include "ScaryRoom.h"
 #include "kidsRoom.h"
 #include "Company.h"
+#include "mtmtest.h"
 
-#define RUN_TEST(test) \
-do { \
-printf("Running " #test "... "); \
-if (test()) { \
-    printf("[SUCCESS]"); \
-} \
-else{ \
-    printf("[FAILED at %s : %d\n]", __FILE__, __LINE__); \
- } \
- printf("\n"); \
-} while(0)
 
 using namespace mtm::escaperoom;
 
@@ -76,62 +66,36 @@ static bool escaperoomWrapperVectorFunctions(){
     room.addEnigma(enigma);
     room.addEnigma(enigma2);
     Enigma hardest = room.getHardestEnigma();
-    if(hardest!=enigma2)
-        return false;
+    ASSERT_EQUALS(hardest,enigma2);
     std::vector<Enigma>& roomEnigmas=room.getAllEnigmas();
     if(roomEnigmas.size()!=2 || roomEnigmas[0]!=enigma || roomEnigmas[1]!=enigma2)
         return false;
-
-    room.removeEnigma(enigma);
+    ASSERT_NO_THROW(room.removeEnigma(enigma));
     if(roomEnigmas.size()!=1 || roomEnigmas[0]!=enigma2)
         return false;
-    try {
-        room.removeEnigma(enigma);
-    }
-    catch(EscapeRoomEnigmaNotFoundException roomEnigmaNotFoundException){
-        std::cout<<"Enigma is not in room!"<<std::endl;
-    }
-    room.removeEnigma(enigma2);
+    ASSERT_THROWS(EscapeRoomEnigmaNotFoundException, room.removeEnigma(enigma));
+    ASSERT_NO_THROW(room.removeEnigma(enigma2));
     if(!roomEnigmas.empty())
         return false;
-
-    try {
-        room.removeEnigma(enigma2);
-    }
-
-    catch(EscapeRoomNoEnigmasException roomNoEnigmasException){
-        std::cout<<"There are no enigmas in room!"<<std::endl;
-    }
-
-    try {
-        room.getHardestEnigma();
-    }
-
-    catch(EscapeRoomNoEnigmasException roomNoEnigmasException){
-        std::cout<<"There are no enigmas in room!"<<std::endl;
-    }
-
+    ASSERT_THROWS(EscapeRoomNoEnigmasException, room.removeEnigma(enigma2));
+    ASSERT_THROWS(EscapeRoomNoEnigmasException,room.getHardestEnigma());
     return true;
 }
 
 static bool getFunctions(){
     EscapeRoomWrapper room=EscapeRoomWrapper((char*)"roomName",50,4,5);
-    if(room.getName()!=(std::string)"roomName") {
-        return false;
-    }
-    if(room.getMaxParticipants()!=5)
-        return false;
-    if(room.getMaxTime()!=50)
-        return false;
-    if(room.level()!=4)
-        return false;
-    room.rate(5);
-    room.rate(4);
-    room.rate(3);
-    room.rate(2);
-    if(room.getRate()!=3.5)
-        return false;
-    std::cout<<"eliminate err"<<std::endl;
+    ASSERT_EQUALS((std::string)"roomName",room.getName());
+    ASSERT_EQUALS(5,room.getMaxParticipants());
+    ASSERT_EQUALS(50,room.getMaxTime());
+    ASSERT_EQUALS(4,room.level());
+
+    ASSERT_NO_THROW(room.rate(5));
+    ASSERT_NO_THROW(room.rate(4));
+    ASSERT_NO_THROW(room.rate(3));
+    ASSERT_NO_THROW(room.rate(2));
+
+    ASSERT_EQUALS(3.5,room.getRate());
+
     return true;
 }
 
@@ -167,56 +131,36 @@ static bool powerTests(){
 
 static bool enigmaBasicFunctions(){
     set<string> elements;
-    elements.insert("map");
-    elements.insert("pen");
-    elements.insert("clock");
-    elements.insert("lock");
-    elements.insert("key");
+    ASSERT_NO_THROW(elements.insert("map"));
+    ASSERT_NO_THROW(elements.insert("pen"));
+    ASSERT_NO_THROW(elements.insert("clock"));
+    ASSERT_NO_THROW(elements.insert("lock"));
+    ASSERT_NO_THROW(elements.insert("key"));
     Enigma basic("Empty",(Difficulty)3);
-    basic.addElement("hat");
-    basic.addElement("hat");
+    ASSERT_NO_THROW(basic.addElement("hat"));
+    ASSERT_NO_THROW(basic.addElement("hat"));
     if(basic.getSetOfElements().size()!=1 || basic.getNumOfElements()!=1)
         return false;
-    try {
-        basic.removeElement("boom");
-    }
-
-    catch(EnigmaElementNotFundException) {
-        std::cout<<"Element not found!"<<std::endl;
-    }
-    basic.removeElement("hat");
+    ASSERT_THROWS(EnigmaElementNotFundException,basic.removeElement("boom"));
+    ASSERT_NO_THROW(basic.removeElement("hat"));
     if(basic.getSetOfElements().size()!=0 || basic.getNumOfElements()!=0)
         return false;
-    try {
-        basic.removeElement("key");
-    }
-    catch(EnigmaNoElementsException noElementsException){
-        std::cout<<"No elements in current enigma!"<<std::endl;
-    }
-    try {
-        Enigma enigma("allan",(Difficulty)0,1,elements);
-    }
-    catch( EnigmaIllegalSizeParamException illegalSizeParamException){
-        std::cout<<"Wrong set size!"<<std::endl;
-    }
+    ASSERT_THROWS(EnigmaNoElementsException,basic.removeElement("key"));
+    try { Enigma enigma("allan",(Difficulty)0,1,elements); }
+    catch( EnigmaIllegalSizeParamException illegalSizeParamException){ std::cout<<"Wrong set size!"<<std::endl; }
     Enigma enigma("allan",(Difficulty)0,5,elements);
     Enigma enigma1=enigma;
     Enigma enigma2(enigma1);
     std::cout<<"compute will now print 3 identical enigma from different constructors\n"
              <<enigma<<enigma1<<enigma2<<std::endl;
-    if(enigma.getName()!="allan")
-        return false;
-    if(enigma1.getDifficulty()!=(Difficulty)0)
-        return false;
-    if(enigma1!=enigma2)
-        return false;
-    if(!enigma1.areEqualyComplex(enigma2))
-        return false;
-    if (enigma.getSetOfElements()!=elements)
-        return false;
+    ASSERT_EQUALS("allan",enigma.getName());
+    ASSERT_EQUALS((Difficulty)0,enigma1.getDifficulty());
+    ASSERT_EQUALS(enigma2,enigma1);
+    ASSERT_EQUALS(true,enigma1.areEqualyComplex(enigma2));
+    ASSERT_EQUALS(elements,enigma.getSetOfElements());
     set<string> more_elements;
-    more_elements.insert("budha sculpture");
-    more_elements.insert("KFC Chicken");
+    ASSERT_NO_THROW(more_elements.insert("budha sculpture"));
+    ASSERT_NO_THROW(more_elements.insert("KFC Chicken"));
     Enigma enigma3("bobo",(Difficulty)1,2,more_elements);
     if(enigma3<enigma1||enigma3<enigma2)
         return false;
@@ -259,27 +203,25 @@ static bool iteratorBasic(){
 
 static bool listBasic(){
     List<T> list1;
-    list1.insert("ahmad");
-    list1.insert("allah");
+    ASSERT_NO_THROW(list1.insert("ahmad"));
+    ASSERT_NO_THROW(list1.insert("allah"));
     assert(list1.getSize()==2);
-    list1.insert("davidof");
+    ASSERT_NO_THROW(list1.insert("davidof"));
     assert(list1.getSize()==3);
     List<T>::Iterator it=list1.begin();
     List<T>::Iterator it2(it);
     const node<T> node1=it2.getNode();
-    if(it != it2)
-        return false;
+    ASSERT_EQUALS(it2,it);
     List<T>::Iterator it3=list1.end();
-    if(it==it3)
-        return false;
+    ASSERT_NOT_EQUAL(it3,it);
     T var1=*it++;
     T var2=*it;
     --it;
     T var3=*it;
-    assert(var3==var1);
+    ASSERT_EQUALS(var3,var1);
     it++;
     T var4=*--it;
-    assert(var4==var3);
+    ASSERT_EQUALS(var4,var3);
     it=list1.end();
     it=it2;
     it=it;
@@ -288,9 +230,9 @@ static bool listBasic(){
 
 static bool listInsertion(){
     List<T> list1;
-    list1.insert("aaaaa");
-    list1.insert("bbbbb");
-    list1.insert("ccccc");
+    ASSERT_NO_THROW(list1.insert("aaaaa"));
+    ASSERT_NO_THROW(list1.insert("bbbbb"));
+    ASSERT_NO_THROW(list1.insert("ccccc"));
     List<T>::Iterator iterator=list1.begin();
     iterator++;
     List<T>::Iterator iterator2=list1.begin();
@@ -300,92 +242,69 @@ static bool listInsertion(){
     if (iterator2!=iterator)
         iterator--;
     List<T> list2;
-    list2.insert("aaaaa");
-    list2.insert("bbbbb");
-    list2.insert("ccccc");
-    if(list1==list2)
-        std::cout<<"yay"<<std::endl;
+    ASSERT_NO_THROW(list2.insert("aaaaa"));
+    ASSERT_NO_THROW(list2.insert("bbbbb"));
+    ASSERT_NO_THROW(list2.insert("ccccc"));
+    ASSERT_EQUALS(list1,list2);
     List<T>::Iterator iterator3=list2.begin();
     if(iterator3==iterator)
         iterator2++;
-    list1.remove(iterator);
+    ASSERT_NO_THROW(list1.remove(iterator));
     iterator=list1.begin();
     iterator++;
-    list1.remove(iterator);
-    if(list1!=list2)
-        std::cout<<"double yay"<<std::endl;
+    ASSERT_NO_THROW(list1.remove(iterator));
+    ASSERT_NOT_EQUAL(list1,list2);
+    std::cout<<"double yay"<<std::endl;
     return true;
 }
 
 static bool listAdvanced(){
     List<T> list;
-    list.insert("avraham");
+    ASSERT_NO_THROW(list.insert("avraham"));
     List<T>::Iterator iterator1=list.begin();
     List<T>::Iterator iterator2=list.begin();
-    list.insert("Gury");
-    list.insert("Alfy",iterator1);
+    ASSERT_NO_THROW(list.insert("Gury"));
+    ASSERT_NO_THROW(list.insert("Alfy",iterator1));
     iterator1 =(++list.begin());
-    list.insert("Dolev Shifris",iterator1);
+    ASSERT_NO_THROW(list.insert("Dolev Shifris",iterator1));
     HasSameName IsGury("Gury");
     const HasSameName& Predicate = IsGury;
-    iterator2=list.find(Predicate);
-    if(iterator2.getNode().getInfo()!="Gury")
-        return false;
+    ASSERT_NO_THROW(iterator2=list.find(Predicate));
+    ASSERT_EQUALS("Gury",iterator2.getNode().getInfo());
     const StringIsSmaller compare;
-    list.sort(compare);
+    ASSERT_NO_THROW(list.sort(compare));
     iterator1= list.begin();
-    if(iterator1.getNode().getInfo()!="Alfy")
-        return false;
-    if((++iterator1).getNode().getInfo()!="Dolev Shifris")
-        return false;
-    if((++iterator1).getNode().getInfo()!="Gury")
-        return false;
-    if((++iterator1).getNode().getInfo()!="avraham")
-        return false;
-
+    ASSERT_EQUALS("Alfy",iterator1.getNode().getInfo());
+    ASSERT_EQUALS("Dolev Shifris",(++iterator1).getNode().getInfo());
+    ASSERT_EQUALS("Gury",(++iterator1).getNode().getInfo());
+    ASSERT_EQUALS("avraham",(++iterator1).getNode().getInfo());
     return true;
 }
 
 static bool scaryBaseFunctions(){
     ScaryRoom room=ScaryRoom((char*)"firstRoom",50,5,4,16,7);
-    std::cout<<room<<std::endl;
-    if(room.getNumOfScaryEnigmas()!=7)
-        return false;
-    room.setNewAgeLimit(14);
-    room.incNumberOfScaryEnigmas();
-    if (room.getNumOfScaryEnigmas()!=8)
-        return false;
-    std::cout<<room<<std::endl;
-
-    try{ room.setNewAgeLimit(-3); }
-    catch(ScaryRoomIllegalAgeLimit){ std::cout<<"Illegal Age Limit!" <<std::endl; }
-    std::cout<<room<<std::endl;
+    ASSERT_EQUALS(7,room.getNumOfScaryEnigmas());
+    ASSERT_NO_THROW(room.setNewAgeLimit(14));
+    ASSERT_NO_THROW(room.incNumberOfScaryEnigmas());
+    ASSERT_EQUALS(8,room.getNumOfScaryEnigmas());
+    ASSERT_THROWS(ScaryRoomIllegalAgeLimit,room.setNewAgeLimit(-3));
     return true;
 }
 
 static bool kidsBaseFunctions(){
     kidsRoom room=kidsRoom((char*)"firstRoom",50,5,4,7);
-    std::cout<<room<<std::endl;
-    room.setNewAgeLimit(3);
-    std::cout<<room<<std::endl;
-    try{
-        room.setNewAgeLimit(-3);
-    }
-    catch(mtm::escaperoom::KidsRoomIllegalAgeLimit){
-        std::cout<<"Illegal Age Limit!" <<std::endl;
-
-    }
-    std::cout<<room<<std::endl;
+    ASSERT_NO_THROW(room.setNewAgeLimit(3));
+    ASSERT_THROWS(mtm::escaperoom::KidsRoomIllegalAgeLimit,room.setNewAgeLimit(-3));
     return true;
 }
 
 static bool companyBaseFunctions(){
     Company company1("EscapeHere","054232211");
-    company1.createRoom((char*)"anubis",60,5,3);
+    ASSERT_NO_THROW(company1.createRoom((char*)"anubis",60,5,3));
     Company company2("bla","blabla");
-    company2 = company1;
-    company1.createKidsRoom((char*)"toyLand",80,3,2,5);
-    company2.createScaryRoom((char*)"elemSt",55,8,4,16,6);
+    ASSERT_NO_THROW(company2 = company1);
+    ASSERT_NO_THROW(company1.createKidsRoom((char*)"toyLand",80,3,2,5));
+    ASSERT_NO_THROW(company2.createScaryRoom((char*)"elemSt",55,8,4,16,6));
     set<EscapeRoomWrapper*> rooms_set1 = company1.getAllRooms();
     set<EscapeRoomWrapper*> rooms_set2 = company2.getAllRooms();
     PrintByType(rooms_set1);
@@ -394,39 +313,27 @@ static bool companyBaseFunctions(){
 }
 
 static bool AddRemoveEnigma(Company company1, Company company2){
-    std::cout<<std::endl;
     set<EscapeRoomWrapper*> rooms_set1 = company1.getAllRooms();
     set<EscapeRoomWrapper*> rooms_set2 = company2.getAllRooms();
     set<string> elements;
     Enigma LegoLand("LegoLand",(Difficulty)3);
     Enigma Baskerwill("Baskerwill",(Difficulty)5,0,elements);
-    rooms_set1 = company1.getAllRooms();
-    company1.addEnigma(*(*(rooms_set1.begin())),LegoLand);
-    company1.addEnigma(*(*(++rooms_set1.begin())),Baskerwill);
-    rooms_set1=company1.getAllRooms();
+    ASSERT_NO_THROW(rooms_set1 = company1.getAllRooms());
+    ASSERT_NO_THROW(company1.addEnigma(*(*(rooms_set1.begin())),LegoLand));
+    ASSERT_NO_THROW(company1.addEnigma(*(*(++rooms_set1.begin())),Baskerwill));
+    ASSERT_NO_THROW(rooms_set1=company1.getAllRooms());
     Iterator iterator = rooms_set1.begin();
     std::vector<Enigma>& enigmas = (*iterator)->getAllEnigmas();
-    if(enigmas[0]!=LegoLand)
-        return false;
+    ASSERT_EQUALS(LegoLand,enigmas[0]);
     iterator++;
     std::vector<Enigma>& enigmas2 = (*iterator)->getAllEnigmas();
-    if(enigmas2[0]!=Baskerwill)
-        return false;
-
-    if(enigmas2.size()!=1)
-        return false;
-    company1.removeEnigma(*(*iterator),Baskerwill);
+    ASSERT_EQUALS(Baskerwill,enigmas2[0]);
+    ASSERT_EQUALS(1,enigmas2.size());
+    ASSERT_NO_THROW(company1.removeEnigma(*(*iterator),Baskerwill));
     enigmas2 = (*iterator)->getAllEnigmas();
-    if(enigmas2.size()!=0)
-        return false;
-
-    try { company1.removeEnigma(*(*(--iterator)),Baskerwill); }
-    catch(CompanyRoomEnigmaNotFoundException){ std::cout<<"enigma not found!"<<std::endl; }
-
-    try { company1.removeEnigma(*(*(++iterator)),Baskerwill); }
-    catch(CompanyRoomHasNoEnigmasException){std::cout<<"no enigmas in room!"<<std::endl<<std::endl;}
-
-
+    ASSERT_EQUALS(0,enigmas2.size());
+    ASSERT_THROWS(CompanyRoomEnigmaNotFoundException,company1.removeEnigma(*(*(--iterator)),Baskerwill));
+    ASSERT_THROWS(CompanyRoomHasNoEnigmasException,company1.removeEnigma(*(*(++iterator)),Baskerwill));
     return true;
 }
 
@@ -437,64 +344,47 @@ static bool AddRemoveItem(Company company1, Company company2){
 
     set<EscapeRoomWrapper*> rooms_set1 = company1.getAllRooms();
     set<EscapeRoomWrapper*> rooms_set2 = company2.getAllRooms();
-    company1.addEnigma(*(*(rooms_set1.begin())),LegoLand);
-    company2.addEnigma( (*(*(rooms_set2.begin()))),Spear);
-    company1.addEnigma( (*(*(rooms_set1.begin()))),Tuty);
+    ASSERT_NO_THROW(company1.addEnigma(*(*(rooms_set1.begin())),LegoLand));
+    ASSERT_NO_THROW(company2.addEnigma( (*(*(rooms_set2.begin()))),Spear));
+    ASSERT_NO_THROW(company1.addEnigma( (*(*(rooms_set1.begin()))),Tuty));
 
     rooms_set1 = company1.getAllRooms();
     rooms_set2 = company2.getAllRooms();
     Iterator iterator1 = rooms_set1.begin();
     Iterator iterator2 = rooms_set2.begin();
     std::vector<Enigma>& enigmasVector1 = (*(*iterator1)).getAllEnigmas();
-    if(enigmasVector1[0].getNumOfElements()!=0)
-        return false;
-    company1.addItem((*(*iterator1)),enigmasVector1[0],"Gerbil");
-    company1.addItem((*(*iterator1)),enigmasVector1[0],"Chinchila");
-    company1.addItem((*(*iterator1)),enigmasVector1[0],"Chin");
+    ASSERT_EQUALS(0,enigmasVector1[0].getNumOfElements());
+
+    ASSERT_NO_THROW(company1.addItem((*(*iterator1)),enigmasVector1[0],"Gerbil"));
+    ASSERT_NO_THROW(company1.addItem((*(*iterator1)),enigmasVector1[0],"Chinchila"));
+    ASSERT_NO_THROW(company1.addItem((*(*iterator1)),enigmasVector1[0],"Chin"));
     enigmasVector1 = (*(*iterator1)).getAllEnigmas();
-    if(enigmasVector1[0].getNumOfElements()!=3)
-        return false;
-    company1.removeItem((*(*iterator1)),enigmasVector1[0],"Chinchila");
+    ASSERT_EQUALS(3,enigmasVector1[0].getNumOfElements());
+
+    ASSERT_NO_THROW(company1.removeItem((*(*iterator1)),enigmasVector1[0],"Chinchila"));
     enigmasVector1 = (*(*iterator1)).getAllEnigmas();
-    if(enigmasVector1[0].getNumOfElements()!=2)
-        return false;
+    ASSERT_EQUALS(2,enigmasVector1[0].getNumOfElements());
 
-    try { company1.addItem((*(*iterator2)),enigmasVector1[0],"Nambsatsul"); }
-
-    catch(CompanyRoomNotFoundException){ std::cout<<"No such room in that company!"<<std::endl; }
-
-    try { company1.addItem((*(*iterator1)),Spear,"Nambsatsul"); }
-
-    catch(CompanyRoomEnigmaNotFoundException){ std::cout<<"No such enigma in that room!"<<std::endl;}
-
-    try {  company1.removeItem((*(*iterator1)),enigmasVector1[1],"Chin"); }
-
-    catch(CompanyRoomEnigmaHasNoElementsException){std::cout<<"There are no elements in that enigma!"<<std::endl; }
-
-    try {  company1.removeItem((*(*iterator1)),enigmasVector1[0],"Chinchila"); }
-
-    catch(CompanyRoomEnigmaElementNotFoundException){ std::cout<<"There is no such element in that enigma!"<<std::endl;}
-
-    try {company1.removeItem((*(*iterator1)),Spear,"Chinchila"); }
-
-    catch(CompanyRoomEnigmaNotFoundException){ std::cout<<"There is no such enigma in that room!"<<std::endl;}
-
-    try {company1.removeItem((*(*iterator2)),enigmasVector1[0],"Gerbil"); }
-
-    catch(CompanyRoomNotFoundException){ std::cout<<"There is no such room in that company!"<<std::endl;}
+    ASSERT_THROWS(CompanyRoomNotFoundException,company1.addItem((*(*iterator2)),enigmasVector1[0],"Nambsatsul"));
+    ASSERT_THROWS(CompanyRoomEnigmaNotFoundException, company1.addItem((*(*iterator1)),Spear,"Nambsatsul"));
+    ASSERT_THROWS(CompanyRoomEnigmaHasNoElementsException,company1.removeItem((*(*iterator1)),enigmasVector1[1],"Chin"));
+    ASSERT_THROWS(CompanyRoomEnigmaElementNotFoundException,
+                  company1.removeItem((*(*iterator1)),enigmasVector1[0],"Chinchila"));
+    ASSERT_THROWS(CompanyRoomEnigmaNotFoundException,company1.removeItem((*(*iterator1)),Spear,"Chinchila"));
+    ASSERT_THROWS(CompanyRoomNotFoundException,company1.removeItem((*(*iterator2)),enigmasVector1[0],"Gerbil"));
 
     return true;
 }
 
 static bool companyAddRemoveFunctions(){
     Company company1("Escape-oh","053666667");
-    company1.createRoom((char*)"AlexanderMokadon",60,5,3);
+    ASSERT_NO_THROW(company1.createRoom((char*)"AlexanderMokadon",60,5,3));
     Company company2("Freddy","034342678");
-    company2 = company1;
-    company1.createKidsRoom((char*)"toyLand",80,3,2,5);
-    company1.createRoom((char*)"Sherlock",65,7,4);
-    company2.createKidsRoom((char*)"Marshmello",120,6,3,9);
-    company2.createScaryRoom((char*)"elemSt",55,8,4,16,6);
+    ASSERT_NO_THROW(company2 = company1);
+    ASSERT_NO_THROW(company1.createKidsRoom((char*)"toyLand",80,3,2,5));
+    ASSERT_NO_THROW(company1.createRoom((char*)"Sherlock",65,7,4));
+    ASSERT_NO_THROW(company2.createKidsRoom((char*)"Marshmello",120,6,3,9));
+    ASSERT_NO_THROW(company2.createScaryRoom((char*)"elemSt",55,8,4,16,6));
     EscapeRoomWrapper Holand((char*)"Guttentag",50,7,8);
     EscapeRoomWrapper ElemSt2((char*)"elemSt",55,8,4);
 
@@ -504,31 +394,28 @@ static bool companyAddRemoveFunctions(){
     PrintByType(rooms_set1);
     PrintByType(rooms_set2);
 
-    company1.removeRoom(*(*(rooms_set1.begin())));
+    ASSERT_NO_THROW(company1.removeRoom(*(*(rooms_set1.begin()))));
     PrintByType( company1.getAllRooms());
-    try { company2.removeRoom(Holand); }
-    catch (CompanyRoomNotFoundException){ std::cout <<"room not found!"<<std::endl; }
-    company2.removeRoom(ElemSt2);
+    ASSERT_NO_THROW(company2.removeRoom(ElemSt2));
+    ASSERT_THROWS(CompanyRoomNotFoundException, company2.removeRoom(ElemSt2));
     PrintByType(company2.getAllRooms());
 
     AddRemoveEnigma(company1,company2);
-
     AddRemoveItem(company1,company2);
-
     return true;
 }
 
 static bool companyGetPrintFunctions(){
     Company company1("Escape-oh","053666667");
-    company1.createRoom((char*)"AlexanderMokadon",60,5,3);
+    ASSERT_NO_THROW(company1.createRoom((char*)"AlexanderMokadon",60,5,3));
     Company company2("Freddy","034342678");
-    company2 = company1;
-    company2.createScaryRoom((char*)"Alien",40,3,5,15,5);
-    company1.createKidsRoom((char*)"toyLand",80,3,2,5);
-    company1.createRoom((char*)"Sherlock",65,7,4);
-    company2.createKidsRoom((char*)"Marshmello",120,6,3,9);
-    company2.createScaryRoom((char*)"elemSt",55,8,4,16,6);
-    company2.createScaryRoom((char*)"Jaws",67,6,7,18,10);
+    ASSERT_NO_THROW(company2 = company1);
+    ASSERT_NO_THROW(company2.createScaryRoom((char*)"Alien",40,3,5,15,5));
+    ASSERT_NO_THROW(company1.createKidsRoom((char*)"toyLand",80,3,2,5));
+    ASSERT_NO_THROW(company1.createRoom((char*)"Sherlock",65,7,4));
+    ASSERT_NO_THROW(company2.createKidsRoom((char*)"Marshmello",120,6,3,9));
+    ASSERT_NO_THROW(company2.createScaryRoom((char*)"elemSt",55,8,4,16,6));
+    ASSERT_NO_THROW(company2.createScaryRoom((char*)"Jaws",67,6,7,18,10));
 
     set<EscapeRoomWrapper*> scary_room_company2 = company2.getAllRoomsByType(mtm::escaperoom::SCARY_ROOM);
     set<EscapeRoomWrapper*> kids_room_company1 = company1.getAllRoomsByType(mtm::escaperoom::KIDS_ROOM);
@@ -537,19 +424,14 @@ static bool companyGetPrintFunctions(){
     PrintByType(kids_room_company1);
     PrintByType(base_room_company1);
 
-    try { company1.getRoomByName("Alien"); }
-    catch(CompanyRoomNotFoundException){std::cout<<"There is no room with such name in company!"<<std::endl;}
-
+    ASSERT_THROWS(CompanyRoomNotFoundException,company1.getRoomByName("Alien"));
     EscapeRoomWrapper* roomWrapper = company2.getRoomByName("Alien");
-    if(*roomWrapper!=*(*scary_room_company2.begin()))
-        return false;
+    ASSERT_EQUALS(*(*scary_room_company2.begin()),*roomWrapper);
 
     std::set<string>Items;
     string hello="hi";
-    Items.insert(hello);
-
+    ASSERT_NO_THROW(Items.insert(hello));
     const std::set<string>& Items1 =Items;
-
 
     set<EscapeRoomWrapper*> rooms_set1 = company1.getAllRooms();
     set<EscapeRoomWrapper*> rooms_set2 = company2.getAllRooms();
@@ -560,16 +442,16 @@ static bool companyGetPrintFunctions(){
     Enigma Freddy("Freddy",(Difficulty)1);
 
     rooms_set1 = company1.getAllRooms();
-    company1.addEnigma(*(*(rooms_set1.begin())),LegoLand);
-    company1.addEnigma(*(*(rooms_set1.begin())),Tuty);
-    company1.addEnigma(*(*(++rooms_set1.begin())),Baskerwill);
-    company2.addEnigma(*(*(++rooms_set2.begin())),Freddy);
+    ASSERT_NO_THROW(company1.addEnigma(*(*(rooms_set1.begin())),LegoLand));
+    ASSERT_NO_THROW(company1.addEnigma(*(*(rooms_set1.begin())),Tuty));
+    ASSERT_NO_THROW(company1.addEnigma(*(*(++rooms_set1.begin())),Baskerwill));
+    ASSERT_NO_THROW(company2.addEnigma(*(*(++rooms_set2.begin())),Freddy));
 
     Iterator iterator1 = rooms_set1.begin();
     std::vector<Enigma>& enigmasVector1 = (*(*iterator1)).getAllEnigmas();
-    company1.addItem((*(*iterator1)),enigmasVector1[0],"LegoBoy");
-    company1.addItem((*(*iterator1)),enigmasVector1[0],"LegoGuy");
-    company1.addItem((*(*iterator1)),enigmasVector1[0],"LegoGirl");
+    ASSERT_NO_THROW(company1.addItem((*(*iterator1)),enigmasVector1[0],"LegoBoy"));
+    ASSERT_NO_THROW(company1.addItem((*(*iterator1)),enigmasVector1[0],"LegoGuy"));
+    ASSERT_NO_THROW(company1.addItem((*(*iterator1)),enigmasVector1[0],"LegoGirl"));
 
     std::cout<<std::endl;
     std::cout<<company1<<std::endl;
@@ -594,11 +476,11 @@ static void tests() {
     RUN_TEST(scaryBaseFunctions);
     RUN_TEST(kidsBaseFunctions);
     RUN_TEST(companyBaseFunctions);
-    RUN_TEST(companyAddRemoveFunctions); //Don't forget to fix copy constructors !!!
+    RUN_TEST(companyAddRemoveFunctions);
     RUN_TEST(companyGetPrintFunctions);
 }
 
-int FinalTest() {
+int FinalTests() {
     std::cout << "Program start" << std::endl;
     tests();
     return 0;

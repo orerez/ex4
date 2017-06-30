@@ -4,5 +4,6 @@ project(new_ex4)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES main.cpp  Enigma.h Enigma.cpp Exceptions.h EscapeRoom.c EscapeRoom.h EscapeRoomWrapper.cpp
-        EscapeRoomWrapper.h List.cpp List.h ScaryRoom.cpp ScaryRoom.h kidsRoom.h kidsRoom.cpp Company.h Company.cpp Tests.cpp)
+        EscapeRoomWrapper.h List.cpp List.h ScaryRoom.cpp ScaryRoom.h kidsRoom.h kidsRoom.cpp Company.h Company.cpp
+        Tests.cpp mtmtest.h)
 add_executable(new_ex4 ${SOURCE_FILES})

@@ -111,6 +111,8 @@ void Company::addEnigma(const EscapeRoomWrapper &room, const Enigma &enigma) {
             return;
         }
     }
+    CompanyRoomNotFoundException roomNotFoundException;
+    throw roomNotFoundException;
 }
 
 Company& Company::operator=(const Company &company) {
